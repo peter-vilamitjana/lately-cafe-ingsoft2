@@ -28,3 +28,6 @@ local_settings.py
 .idea/
 .DS_Store
 !.env.example
+
+# Skills locales de Claude
+.claude/skills/ui-ux-pro-max/
