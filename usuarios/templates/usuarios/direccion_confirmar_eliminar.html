@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block contenido %}
+<section class="tarjeta angosta">
+  <h1>Eliminar dirección</h1>
+  <p>¿Eliminar <strong>{{ object }}</strong>?</p>
+  <form method="post">{% csrf_token %}<button class="btn peligro">Eliminar</button> <a href="{% url 'direcciones' %}">Cancelar</a></form>
+</section>
+{% endblock %}

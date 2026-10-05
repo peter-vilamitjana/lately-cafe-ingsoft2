@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block contenido %}
+<section class="tarjeta angosta">
+  <h1>Configuración</h1>
+  <form method="post">{% csrf_token %}{{ form.as_div }}<button class="btn">Guardar</button></form>
+</section>
+{% endblock %}

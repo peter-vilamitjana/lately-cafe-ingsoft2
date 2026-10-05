@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block titulo %}Menú · Lately Café{% endblock %}
+{% block contenido %}
+<header class="encabezado">
+  <p class="sobre">Lately Café</p>
+  <h1>Nuestro menú</h1>
+</header>
+
+<form method="get" class="buscador" role="search">
+  {% if categoria %}<input type="hidden" name="categoria" value="{{ categoria }}">{% endif %}
+  <input type="search" name="q" value="{{ q }}" placeholder="Buscar por nombre" aria-label="Buscar por nombre">
+  <button class="btn">Buscar</button>
+</form>
+
+<nav class="chips" aria-label="Categorías">
+  <a class="chip {% if not categoria %}activo{% endif %}" href="?{% if q %}q={{ q|urlencode }}{% endif %}" {% if not categoria %}aria-current="true"{% endif %}>Todas las categorías</a>
+  {% for valor, etiqueta in categorias %}
+    <a class="chip {% if valor == categoria %}activo{% endif %}" href="?categoria={{ valor }}{% if q %}&amp;q={{ q|urlencode }}{% endif %}" {% if valor == categoria %}aria-current="true"{% endif %}>{{ etiqueta }}</a>
+  {% endfor %}
+</nav>
+
+<div class="grilla">
+  {% for p in productos %}
+    <article class="producto {% if not p.disponible %}agotado{% endif %}">
+      {% include "componentes/_foto.html" %}
+      <div class="producto-cuerpo">
+        <p class="categoria">{{ p.get_categoria_display }}</p>
+        <h2>{{ p.nombre }}</h2>
+        {% if p.descripcion %}<p class="descripcion">{{ p.descripcion }}</p>{% endif %}
+        <div class="producto-pie"><span class="precio">${{ p.precio }}</span>{% include "componentes/_agregar.html" %}</div>
+      </div>
+    </article>
+  {% empty %}
+    <div class="vacio">
+      <svg viewBox="0 0 64 64" width="72" height="72" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 26h34v12a14 14 0 0 1-14 14h-6a14 14 0 0 1-14-14V26z"/><path d="M46 30h4a6 6 0 0 1 0 12h-5"/><path d="M22 18c0-3 3-4 3-7M31 18c0-3 3-4 3-7M40 18c0-3 3-4 3-7"/></svg>
+      <p>No hay productos que coincidan.</p>
+      <a class="btn btn-secundario" href="{% url 'menu:listado' %}">Ver todo el menú</a>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

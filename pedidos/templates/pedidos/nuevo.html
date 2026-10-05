@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block contenido %}
+<section class="tarjeta angosta">
+  <h1>Tu pedido</h1>
+  <p>Total del carrito: <strong>${{ carrito.total }}</strong>. Delivery desde ${{ config.monto_minimo_delivery }} y solo con transferencia.</p>
+  {% if not hay_locales %}
+    <p class="aviso error">Todavía no hay locales cargados.</p>
+  {% else %}
+  <form method="post">{% csrf_token %}{{ form.as_div }}
+    <button class="btn">Ver resumen</button> <a href="{% url 'carrito:ver' %}">Volver al carrito</a>
+  </form>
+  {% endif %}
+</section>
+{% endblock %}

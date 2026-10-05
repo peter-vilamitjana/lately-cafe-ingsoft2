@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>Panel · Productos</h1>
+<p><a class="btn" href="{% url 'menu:crear' %}">Nuevo producto</a></p>
+<div class="tabla-scroll">
+<table>
+  <thead><tr><th>Nombre</th><th>Categoría</th><th>Precio</th><th>Disponible</th><th></th></tr></thead>
+  <tbody>
+  {% for p in productos %}
+    <tr>
+      <td class="celda-prod">{% if p.imagen %}<img class="mini" src="{{ p.imagen.url }}" alt="">{% endif %}{{ p.nombre }}</td><td>{{ p.get_categoria_display }}</td><td>${{ p.precio }}</td>
+      <td>
+        <form method="post" action="{% url 'menu:disponibilidad' p.pk %}" class="en-linea">{% csrf_token %}
+          <button class="btn chico">{% if p.disponible %}Sí · marcar agotado{% else %}No · marcar disponible{% endif %}</button>
+        </form>
+      </td>
+      <td><a href="{% url 'menu:editar' p.pk %}">Editar</a> · <a href="{% url 'menu:eliminar' p.pk %}">Eliminar</a></td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="5">Todavía no hay productos.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

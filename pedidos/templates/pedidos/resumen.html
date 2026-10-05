@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>Resumen del pedido</h1>
+<section class="tarjeta">
+  <p><strong>Local:</strong> {{ datos.local.nombre }} · {{ datos.local.direccion }}</p>
+  <p><strong>Entrega:</strong> {% if datos.tipo_entrega == "DELIVERY" %}Delivery a {{ datos.direccion }}{% else %}Retiro en el local{% endif %}</p>
+  <p><strong>Pago:</strong> {% if datos.metodo_pago == "TRANSFERENCIA" %}Transferencia{% else %}En el local{% endif %}</p>
+  {% include "pedidos/_items.html" with items=carrito.items.all total=carrito.total %}
+  <form method="post">{% csrf_token %}
+    {% for campo in form %}{{ campo.as_hidden }}{% endfor %}
+    <button class="btn" name="confirmar" value="1">Confirmar pedido</button>
+    <a href="{% url 'pedidos:nuevo' %}">Modificar</a>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>Pedido #{{ pedido.pk }}</h1>
+<section class="tarjeta">
+  <p><strong>Estado del pedido:</strong> <span class="estado {{ pedido.estado }}">{{ pedido.get_estado_display }}</span></p>
+  <p><strong>Estado del pago:</strong> <span class="estado {{ pago.estado }}">{{ pago.get_estado_display }}</span>
+     · {{ pago.get_metodo_display }}</p>
+  {% if pago.estado == "RECHAZADO" %}<p class="aviso error">Pago rechazado. Motivo: {{ pago.motivo }}</p>{% endif %}
+  <p><strong>Local:</strong> {{ pedido.local.nombre }} · {{ pedido.local.direccion }}</p>
+  <p><strong>Entrega:</strong> {% if pedido.tipo_entrega == "DELIVERY" %}Delivery a {{ pedido.direccion_texto }}{% else %}Retiro en el local{% endif %}</p>
+  {% include "pedidos/_items.html" with items=pedido.items.all total=pedido.total %}
+  <div class="acciones">
+    <a class="btn" href="{% url 'pedidos:pago' pedido.pk %}">Información de pago</a>
+    {% if pago.puede_reintentar %}
+      <form method="post" action="{% url 'pedidos:reintentar_pago' pedido.pk %}">{% csrf_token %}<button class="btn">Reintentar pago</button></form>
+    {% endif %}
+    {% if puede_cancelar %}
+      <form method="post" action="{% url 'pedidos:cancelar' pedido.pk %}">{% csrf_token %}<button class="btn peligro">Cancelar pedido</button></form>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block contenido %}
+<section class="tarjeta angosta">
+  <h1>{% if object %}Editar{% else %}Nueva{% endif %} dirección</h1>
+  <form method="post" class="formulario" novalidate>{% csrf_token %}{{ form.as_div }}
+    <button class="btn btn-bloque">Guardar</button> <a class="cancelar" href="{% url 'direcciones' %}">Cancelar</a>
+  </form>
+</section>
+{% endblock %}

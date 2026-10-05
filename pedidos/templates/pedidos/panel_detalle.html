@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>Pedido #{{ pedido.pk }} · {{ pedido.usuario }}</h1>
+<section class="tarjeta">
+  <p><strong>Local:</strong> {{ pedido.local }} · <strong>Entrega:</strong>
+     {% if pedido.tipo_entrega == "DELIVERY" %}Delivery a {{ pedido.direccion_texto }}{% else %}Retiro{% endif %}</p>
+  {% include "pedidos/_items.html" with items=pedido.items.all total=pedido.total %}
+
+  <h2>Pedido: <span class="estado {{ pedido.estado }}">{{ pedido.get_estado_display }}</span></h2>
+  {% if siguientes %}
+  <form method="post" action="{% url 'pedidos:panel_estado' pedido.pk %}" class="acciones">{% csrf_token %}
+    <select name="estado" aria-label="Nuevo estado">{% for e in siguientes %}<option value="{{ e.value }}">{{ e.label }}</option>{% endfor %}</select>
+    <button class="btn">Cambiar estado</button>
+  </form>
+  {% endif %}
+
+  <h2>Pago: <span class="estado {{ pago.estado }}">{{ pago.get_estado_display }}</span> · {{ pago.get_metodo_display }} · ${{ pago.monto }}</h2>
+  {% if pago.motivo %}<p>Motivo del rechazo: {{ pago.motivo }}</p>{% endif %}
+  {% if pago.estado == "PENDIENTE" and pedido.estado != "CANCELADO" %}
+  <div class="acciones">
+    <form method="post" action="{% url 'pedidos:panel_aceptar_pago' pedido.pk %}">{% csrf_token %}<button class="btn">Aceptar pago</button></form>
+    <form method="post" action="{% url 'pedidos:panel_rechazar_pago' pedido.pk %}">{% csrf_token %}
+      <input type="text" name="motivo" placeholder="Motivo (obligatorio)" required aria-label="Motivo del rechazo">
+      <button class="btn peligro">Rechazar pago</button>
+    </form>
+  </div>
+  {% endif %}
+  <p><a href="{% url 'pedidos:panel_lista' %}">Volver a la lista</a></p>
+</section>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>Mis direcciones</h1>
+<p><a class="btn" href="{% url 'direccion_crear' %}">Agregar dirección</a></p>
+<div class="tabla-scroll"><table>
+  <thead><tr><th>Calle</th><th>Ciudad</th><th></th></tr></thead>
+  <tbody>
+  {% for d in direcciones %}
+    <tr><td>{{ d.calle }}</td><td>{{ d.ciudad }}</td>
+        <td><a href="{% url 'direccion_editar' d.pk %}">Editar</a> · <a href="{% url 'direccion_eliminar' d.pk %}">Eliminar</a></td></tr>
+  {% empty %}
+    <tr><td colspan="3">Todavía no cargaste direcciones.</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block contenido %}
+<section class="tarjeta angosta">
+  <h1>{% block h1 %}{% endblock %}</h1>
+  <form method="post" class="formulario" novalidate>{% csrf_token %}
+    {{ form.as_div }}
+    <button class="btn btn-bloque">{% block boton %}Enviar{% endblock %}</button>
+  </form>
+  {% block extra %}{% endblock %}
+</section>
+{% endblock %}

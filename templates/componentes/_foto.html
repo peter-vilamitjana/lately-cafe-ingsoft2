@@ -1,0 +1,28 @@
+{% load static %}
+{# Foto del producto, con fallback estático para la demo o placeholder elegante si no tiene imagen. #}
+<div class="foto">
+  {% if p.imagen %}
+    <img src="{{ p.imagen.url }}" alt="{{ p.nombre }}" loading="lazy" width="800" height="600">
+  {% elif p.nombre == "Espresso" %}
+    <img src="{% static 'demo/espresso.jpg' %}" alt="{{ p.nombre }}" loading="lazy" width="800" height="600">
+  {% elif p.nombre == "Capuchino" %}
+    <img src="{% static 'demo/capuchino.jpg' %}" alt="{{ p.nombre }}" loading="lazy" width="800" height="600">
+  {% elif p.nombre == "Flat White" %}
+    <img src="{% static 'demo/flat-white.jpg' %}" alt="{{ p.nombre }}" loading="lazy" width="800" height="600">
+  {% elif p.nombre == "Té Chai" %}
+    <img src="{% static 'demo/te-chai.jpg' %}" alt="{{ p.nombre }}" loading="lazy" width="800" height="600">
+  {% elif p.nombre == "Medialuna" %}
+    <img src="{% static 'demo/medialuna.jpg' %}" alt="{{ p.nombre }}" loading="lazy" width="800" height="600">
+  {% elif p.nombre == "Cheesecake" %}
+    <img src="{% static 'demo/cheesecake.jpg' %}" alt="{{ p.nombre }}" loading="lazy" width="800" height="600">
+  {% elif p.nombre == "Brownie" %}
+    <img src="{% static 'demo/brownie.jpg' %}" alt="{{ p.nombre }}" loading="lazy" width="800" height="600">
+  {% elif p.nombre == "Jugo de naranja" %}
+    <img src="{% static 'demo/jugo-de-naranja.jpg' %}" alt="{{ p.nombre }}" loading="lazy" width="800" height="600">
+  {% else %}
+    <div class="foto-vacia" role="img" aria-label="{{ p.nombre }} (sin foto)">
+      <svg viewBox="0 0 64 64" width="56" height="56" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 26h34v12a14 14 0 0 1-14 14h-6a14 14 0 0 1-14-14V26z"/><path d="M46 30h4a6 6 0 0 1 0 12h-5"/><path d="M22 18c0-3 3-4 3-7M31 18c0-3 3-4 3-7M40 18c0-3 3-4 3-7"/></svg>
+    </div>
+  {% endif %}
+  {% if not p.disponible %}<span class="etiqueta">No disponible</span>{% endif %}
+</div>

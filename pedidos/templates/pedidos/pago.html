@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>Pago del pedido #{{ pedido.pk }}</h1>
+<section class="tarjeta">
+  <p><strong>Estado del pago:</strong> <span class="estado {{ pago.estado }}">{{ pago.get_estado_display }}</span>
+     {% if pago.estado == "RECHAZADO" %}· Motivo: {{ pago.motivo }}{% endif %}</p>
+  {% if pago.metodo == "TRANSFERENCIA" %}
+    <h2>Transferencia</h2>
+    {% include "pedidos/_items.html" with items=pedido.items.all total=pedido.total %}
+    <p>Transferí <strong>${{ pedido.total }}</strong> al alias <strong>{{ config.alias_transferencia }}</strong>.
+       Un administrador confirmará tu pago.</p>
+  {% else %}
+    <h2>¡Te esperamos!</h2>
+    <p>Pagás en el local al retirar tu pedido de ${{ pedido.total }}:</p>
+    <ul>{% for l in locales %}<li><strong>{{ l.nombre }}</strong> · {{ l.direccion }} ({{ l.horarios }})</li>{% endfor %}</ul>
+  {% endif %}
+  <div class="acciones">
+    {% if pago.puede_reintentar %}
+      <form method="post" action="{% url 'pedidos:reintentar_pago' pedido.pk %}">{% csrf_token %}<button class="btn">Reintentar pago</button></form>
+    {% endif %}
+    {% if pago.puede_cambiar_metodo and pedido.tipo_entrega != "DELIVERY" %}
+      <form method="post" action="{% url 'pedidos:cambiar_metodo' pedido.pk %}">{% csrf_token %}
+        <input type="hidden" name="metodo" value="{% if pago.metodo == 'TRANSFERENCIA' %}EN_LOCAL{% else %}TRANSFERENCIA{% endif %}">
+        <button class="btn">Cambiar a {% if pago.metodo == "TRANSFERENCIA" %}pago en el local{% else %}transferencia{% endif %}</button>
+      </form>
+    {% endif %}
+    <a href="{% url 'pedidos:detalle' pedido.pk %}">Ver pedido</a>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block contenido %}
+<section class="tarjeta angosta">
+  <h1>{% if object %}Editar{% else %}Nuevo{% endif %} producto</h1>
+  <form method="post" enctype="multipart/form-data" class="formulario" novalidate>{% csrf_token %}
+    {{ form.as_div }}
+    <button class="btn btn-bloque">Guardar</button> <a class="cancelar" href="{% url 'menu:panel' %}">Cancelar</a>
+  </form>
+</section>
+{% endblock %}

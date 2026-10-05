@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h1>Panel · Pedidos</h1>
+<div class="tabla-scroll"><table>
+  <thead><tr><th>#</th><th>Cliente</th><th>Local</th><th>Entrega</th><th>Total</th><th>Pedido</th><th>Pago</th></tr></thead>
+  <tbody>
+  {% for p in pedidos %}
+    <tr>
+      <td><a href="{% url 'pedidos:panel_detalle' p.pk %}">#{{ p.pk }}</a></td><td>{{ p.usuario }}</td><td>{{ p.local }}</td>
+      <td>{{ p.get_tipo_entrega_display }}</td><td>${{ p.pago.monto }}</td>
+      <td><span class="estado {{ p.estado }}">{{ p.get_estado_display }}</span></td>
+      <td><span class="estado {{ p.pago.estado }}">{{ p.pago.get_estado_display }}</span> · {{ p.pago.get_metodo_display }}</td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="7">No hay pedidos.</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}
