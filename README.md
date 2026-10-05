@@ -28,7 +28,7 @@ python manage.py runserver
 ## Datos de demo
 
 ```bash
-python manage.py cargar_demo --password-admin 'LatelyAdmin#2026' --password-cliente 'LatelyCliente#2026'
+python manage.py cargar_demo --password-admin '<clave-admin>' --password-cliente '<clave-cliente>'
 ```
 
 Es idempotente (se puede correr varias veces sin duplicar; las contraseñas solo se usan al crear cada usuario).
